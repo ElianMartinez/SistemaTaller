@@ -7,9 +7,10 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-secondary" asp-action="Create">Crear</a>
+
 </p>
-<table class="table">
+<table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>
@@ -37,9 +38,9 @@
                 @Html.DisplayFor(modelItem => item.Cedula)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdClientes">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdClientes">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdClientes">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.IdClientes"><button class="btn btn-warning"><i class="fas fa-edit"></i></button> </a>
+                <a asp-action="Details" asp-route-id="@item.IdClientes"> <button class="btn btn-info"><i class="fas fa-eye"></i></button> </a>
+                <a asp-action="Delete" asp-route-id="@item.IdClientes"> <button class="btn btn-danger"> <i class="fas fa-trash-alt"></i></button></a>
             </td>
         </tr>
 }
