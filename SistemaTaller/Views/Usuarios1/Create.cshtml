@@ -24,12 +24,21 @@
             </div>
             <div class="form-group">
                 <label asp-for="Cargo" class="control-label"></label>
-                <input asp-for="Cargo" class="form-control" />
+                <select asp-for="Cargo" class="form-control">
+                    <option value="Mecánico">Mecánico</option>
+                    <option value="Supervisor">Supervisor</option>
+                    <option value="Representante">Representante</option>
+
+                </select>
                 <span asp-validation-for="Cargo" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
+                <select asp-for="Status" class="form-control">
+                    <option value="1">Activo</option>
+                    <option value="0">Inactivo</option>
+                </select>
+
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">

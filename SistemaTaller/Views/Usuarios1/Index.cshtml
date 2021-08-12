@@ -42,12 +42,20 @@
                 @Html.DisplayFor(modelItem => item.Cargo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
+                @if (item.Status == 0)
+                {
+                    <p class="btn btn-danger">Inactivo</p>
+                }
+                else
+                {
+                    <p class="btn btn-success">Activo</p>
+
+                }
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdUsuarios">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdUsuarios">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdUsuarios">Delete</a>
+                <button asp-action="Edit" asp-route-id="@item.IdUsuarios"><i class="fas fa-edit"></i></button> 
+                <button asp-action="Details" asp-route-id="@item.IdUsuarios"><i class="fas fa-trash-alt"></i></button> 
+                <button asp-action="Delete" asp-route-id="@item.IdUsuarios"><i class="fas fa-eye"></i></button>
             </td>
         </tr>
 }
