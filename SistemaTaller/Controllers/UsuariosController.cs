@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SistemaTaller.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace SistemaTaller.Controllers
 {
@@ -24,7 +22,9 @@ namespace SistemaTaller.Controllers
                 if (usuarios.Where(s => s.Nombre == Nombre && s.Clave == Clave).Any())
                 {
                     var usuario = tallerContext.Usuarios.First(a => a.Nombre == Nombre && a.Clave == Clave);
-                    return Json(new { status = true, message = "Bienvenido", cargo= usuario.Cargo });
+                    Global.CARGO = usuario.Cargo;
+                    Global.ID_USER = usuario.IdUsuarios;
+                    return Json(new { status = true, message = "Bienvenido", cargo= usuario.Cargo, id = usuario.IdUsuarios, pass = usuario.Clave });
                 }
                 else
                 {
@@ -37,5 +37,7 @@ namespace SistemaTaller.Controllers
                 return Json(new { status = false, message = "Credenciales Incorrecta" });
             }
         }
+
+      
     }
 }

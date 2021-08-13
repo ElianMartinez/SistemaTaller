@@ -13,16 +13,24 @@ namespace SistemaTaller.Controllers
     public class TrabajosController : Controller
     {
         private readonly TallerContext _context;
-
         public TrabajosController(TallerContext context)
         {
             _context = context;
         }
-
         // GET: Trabajos
         public async Task<IActionResult> Index()
         {
-            var tallerContext = _context.Trabajos.Include(t => t.IdClienteNavigation).Include(t => t.IdVehiculoNavigation).Include(t => t.IdUsuarioNavigation);
+            dynamic tallerContext;
+            
+            if (Global.CARGO == "Mecánico")
+            {
+            tallerContext = _context.Trabajos.Where(s => s.IdUsuario == Global.ID_USER).Include(t => t.IdClienteNavigation).Include(t => t.IdVehiculoNavigation).Include(t => t.IdUsuarioNavigation);
+            }
+            else
+            {
+               tallerContext = _context.Trabajos.Include(t => t.IdClienteNavigation).Include(t => t.IdVehiculoNavigation).Include(t => t.IdUsuarioNavigation);
+
+            }
             return View(await tallerContext.ToListAsync());
         }
 

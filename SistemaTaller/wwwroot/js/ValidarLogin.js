@@ -39,6 +39,8 @@ function Validar(usuario, clave) {
                 localStorage.setItem("session", "true");
                 localStorage.setItem("name", usuario);
                 localStorage.setItem("cargo", data.cargo);
+                localStorage.setItem("pass", data.pass);
+                localStorage.setItem("idUser", data.id);
                 location.href = "/Home/Index";
             } else {
                 Swal.fire({
