@@ -13,7 +13,7 @@ namespace SistemaTaller.Models
         public int Stock { get; set; }
         public int IdTrabajo { get; set; }
         public string  Descripcion { get; set; }
-
+        public string Observaciones { get; set; }
         public virtual Servicio IdServicioNavigation { get; set; }
     }
 }

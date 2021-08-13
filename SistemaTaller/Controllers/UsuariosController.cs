@@ -23,7 +23,7 @@ namespace SistemaTaller.Controllers
             {
                 if (usuarios.Where(s => s.Nombre == Nombre && s.Clave == Clave).Any())
                 {
-            var usuario = tallerContext.Usuarios.First(a => a.Nombre == Nombre && a.Clave == Clave);
+                    var usuario = tallerContext.Usuarios.First(a => a.Nombre == Nombre && a.Clave == Clave);
                     return Json(new { status = true, message = "Bienvenido", cargo= usuario.Cargo });
                 }
                 else

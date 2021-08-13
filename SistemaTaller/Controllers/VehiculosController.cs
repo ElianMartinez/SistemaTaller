@@ -12,19 +12,16 @@ namespace SistemaTaller.Controllers
     public class VehiculosController : Controller
     {
         private readonly TallerContext _context;
-
         public VehiculosController(TallerContext context)
         {
             _context = context;
         }
-
         // GET: Vehiculos
         public async Task<IActionResult> Index()
         {
             var tallerContext = _context.Vehiculos.Include(v => v.IdClienteNavigation);
             return View(await tallerContext.ToListAsync());
         }
-
         // GET: Vehiculos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -56,7 +53,7 @@ namespace SistemaTaller.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdVehiculo,Marca,Modelo,Color,Annio,Matricula,IdCliente")] Vehiculo vehiculo)
+        public async Task<IActionResult> Create([Bind("IdVehiculo,Marca,Modelo,Color,Annio,Matricula,IdCliente,Kilometros")] Vehiculo vehiculo)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +87,7 @@ namespace SistemaTaller.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdVehiculo,Marca,Modelo,Color,Annio,Matricula,IdCliente")] Vehiculo vehiculo)
+        public async Task<IActionResult> Edit(int id, [Bind("IdVehiculo,Marca,Modelo,Color,Annio,Matricula,IdCliente,Kilometros")] Vehiculo vehiculo)
         {
             if (id != vehiculo.IdVehiculo)
             {

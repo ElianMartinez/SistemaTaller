@@ -28,6 +28,9 @@
                 @Html.DisplayNameFor(model => model.Matricula)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Kilometros)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.IdClienteNavigation)
             </th>
             <th></th>
@@ -50,6 +53,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Matricula)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Kilometros) Kms
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IdClienteNavigation.Nombre)

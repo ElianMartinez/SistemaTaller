@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Agregar un Trabajo</h1>
 
 <h4>Trabajo</h4>
 <hr />
@@ -14,13 +14,14 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="IdCliente" class="control-label"></label>
-                <select asp-for="IdCliente" class ="form-control" asp-items="ViewBag.IdCliente">
-
+                <select id="clientes" asp-for="IdCliente" class="form-control" asp-items="ViewBag.IdCliente">
+                    <option value="">Seleccionar</option>
                 </select>
             </div>
             <div class="form-group">
-                <label asp-for="IdUsuario" class="control-label"></label>
-                <select asp-for="IdUsuario" class ="form-control" asp-items="ViewBag.IdUsuario"></select>
+                <label asp-for="IdVehiculo" class="control-label"></label>
+                <select id="selectVehiculo" asp-for="IdVehiculo" class="form-control" asp-items="ViewBag.IdVehiculo">
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="FechaInicio" class="control-label"></label>
@@ -28,13 +29,21 @@
                 <span asp-validation-for="FechaInicio" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IdVehiculo" class="control-label"></label>
-                <select asp-for="IdVehiculo" class ="form-control" asp-items="ViewBag.IdVehiculo"></select>
+                <label asp-for="Fecha_Salida" class="control-label"></label>
+                <input asp-for="Fecha_Salida" class="form-control" />
+                <span asp-validation-for="Fecha_Salida" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
                 <input asp-for="Status" class="form-control" />
                 <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Observaciones" class="control-label"></label>
+                <textarea asp-for="Observaciones" class="form-control"></textarea>
+                <span asp-validation-for="Observaciones" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -50,3 +59,29 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script>
+    $('#clientes').on('change', function () {
+        var valor = $(this).val();
+        if (valor != "") {
+            $.ajax({
+                url: '/Trabajos/GetVehiculosId',
+                async: true,
+                type: 'POST',
+                data: { id: valor },
+                success: function (res) {
+                    var json = JSON.parse(res.data);
+                    $("#selectVehiculo").empty();
+                    json.map((item) => {
+                        $("#selectVehiculo").append('<option value="' + item.IdVehiculo + '">' + item.Marca + " " + item.Modelo + " " + item.Annio + '</option>');
+                    })
+                },
+                error: function (data) {
+                }
+            });
+        } else {
+            $("#selectVehiculo").empty();
+        }
+        
+    });
+</script>

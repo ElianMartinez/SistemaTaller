@@ -17,15 +17,11 @@ namespace SistemaTaller.Models
         public string Nombre { get; set; }
         [DataType(DataType.Password)]
         [Required(ErrorMessage = "Ingrese la clave")]
-
         public string Clave { get; set; }
         [Required(ErrorMessage = "Ingrese cargo")]
-
         public string Cargo { get; set; }
         [Required(ErrorMessage = "Ingrese el Status")]
-
         public byte? Status { get; set; }
-
         public virtual ICollection<Trabajo> Trabajos { get; set; }
     }
 }

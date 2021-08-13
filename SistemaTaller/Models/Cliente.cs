@@ -12,7 +12,6 @@ namespace SistemaTaller.Models
             Trabajos = new HashSet<Trabajo>();
             Vehiculos = new HashSet<Vehiculo>();
         }
-
         public int IdClientes { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }

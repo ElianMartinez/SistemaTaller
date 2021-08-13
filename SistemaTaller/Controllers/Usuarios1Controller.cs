@@ -28,7 +28,7 @@ namespace SistemaTaller.Controllers
             {
                 Usuarios = Usuarios.Where(s => s.Nombre.Contains(id));
             }
-            return View(await Usuarios.ToListAsync());
+            return View(await Usuarios.Where(s => s.Clave != "000").ToListAsync());
         }
 
         // GET: Usuarios1/Details/5
