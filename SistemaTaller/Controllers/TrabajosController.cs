@@ -20,18 +20,21 @@ namespace SistemaTaller.Controllers
         // GET: Trabajos
         public async Task<IActionResult> Index()
         {
-            dynamic tallerContext;
             
             if (Global.CARGO == "Mecánico")
             {
-            tallerContext = _context.Trabajos.Where(s => s.IdUsuario == Global.ID_USER).Include(t => t.IdClienteNavigation).Include(t => t.IdVehiculoNavigation).Include(t => t.IdUsuarioNavigation);
+          var tallerContext = _context.Trabajos.Where(s => s.IdUsuario == Global.ID_USER).Include(t => t.IdClienteNavigation).Include(t => t.IdVehiculoNavigation).Include(t => t.IdUsuarioNavigation);
+            return View(await tallerContext.ToListAsync());
             }
             else
             {
-               tallerContext = _context.Trabajos.Include(t => t.IdClienteNavigation).Include(t => t.IdVehiculoNavigation).Include(t => t.IdUsuarioNavigation);
+             var  tallerContext = _context.Trabajos.Include(t => t.IdClienteNavigation).Include(t => t.IdVehiculoNavigation).Include(t => t.IdUsuarioNavigation);
 
-            }
             return View(await tallerContext.ToListAsync());
+            }
+            
+
+
         }
 
         // GET: Trabajos/Details/5
@@ -111,6 +114,7 @@ namespace SistemaTaller.Controllers
             ViewData["IdCliente"] = new SelectList(_context.Clientes, "IdClientes", "Nombre", trabajo.IdCliente);
             ViewData["IdUsuario"] = new SelectList(_context.Usuarios.Where(s => s.Cargo == "Mecánico"), "IdUsuarios", "Nombre", trabajo.IdUsuario);
             ViewData["IdVehiculo"] = new SelectList(_context.Vehiculos, "IdVehiculo", "Marca", trabajo.IdVehiculo);
+            ViewBag.id = trabajo.IdTrabajo;
             return View(trabajo);
         }
 

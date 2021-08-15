@@ -8,7 +8,7 @@
 
 <h4>Trabajo</h4>
 <hr />
-<div class="row">
+
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -52,8 +52,15 @@
             </div>
         </form>
     </div>
+<div class="col">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
 </div>
-
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

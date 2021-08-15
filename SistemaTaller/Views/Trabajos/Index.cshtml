@@ -6,10 +6,14 @@
 
 <h1>Trabajo</h1>
 
-<p>
-    <a class="btn btn-secondary" asp-action="Create">Crear</a>
-</p>
-<table class="table table-bordered table-striped" >
+@if (Global.CARGO == "Representante")
+{
+    <p>
+        <a class="btn btn-secondary" asp-action="Create">Crear</a>
+    </p>
+}
+
+<table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>
@@ -37,37 +41,42 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaInicio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fecha_Salida)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Observaciones)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdClienteNavigation.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdUsuarioNavigation.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdVehiculoNavigation.Marca)
-                @Html.DisplayFor(modelItem => item.IdVehiculoNavigation.Modelo)
-                @Html.DisplayFor(modelItem => item.IdVehiculoNavigation.Annio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdTrabajo"><button class="btn btn-warning"><i class="fas fa-edit"></i></button> </a>
-                <a asp-action="Details" asp-route-id="@item.IdTrabajo"> <button class="btn btn-info"><i class="fas fa-eye"></i></button> </a>
-                <a asp-action="Delete" asp-route-id="@item.IdTrabajo"> <button class="btn btn-danger"> <i class="fas fa-trash-alt"></i></button></a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaInicio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fecha_Salida)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Observaciones)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdClienteNavigation.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdUsuarioNavigation.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdVehiculoNavigation.Marca)
+                    @Html.DisplayFor(modelItem => item.IdVehiculoNavigation.Modelo)
+                    @Html.DisplayFor(modelItem => item.IdVehiculoNavigation.Annio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdTrabajo"><button class="btn btn-warning"><i class="fas fa-edit"></i></button> </a>
+                    <a asp-action="Details" asp-route-id="@item.IdTrabajo"> <button class="btn btn-info"><i class="fas fa-eye"></i></button> </a>
+
+                    @if (Global.CARGO == "Representante")
+                    {
+                    <a asp-action="Delete" asp-route-id="@item.IdTrabajo"> <button class="btn btn-danger"> <i class="fas fa-trash-alt"></i></button></a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

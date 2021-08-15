@@ -54,12 +54,12 @@
             <div class="form-group">
                 <input  type="submit" value="Save" class="btn btn-primary" />
             </div>
-        </form>
+        </form>S
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn" asp-action="Index">Volver a la Tabla</a>
 </div>
 
 @section Scripts {
@@ -68,8 +68,28 @@
 
 <script>
 
+    function BuscarDetalles() {
+        $.ajax({
+            url: '/DetalleTrabajo/Index',
+            async: true,
+            type: 'POST',
+            data: { id: @ViewBag.id },
+            success: function (res) {
+                var json = JSON.parse(res.data);
+                console.log(json);
+                //$("#selectVehiculo").empty();
+                //json.map((item) => {
+                //    $("#selectVehiculo").append('<option value="' + item.IdVehiculo + '">' + item.Marca + " " + item.Modelo + " " + item.Annio + '</option>');
+                //})
+            },
+            error: function (data) {
+            }
+        });
+    }
+
     $(document).ready(function () {
-      var valor2 = $('#clientes').val();
+        BuscarDetalles();
+        var valor2 = $('#clientes').val();
         if (valor2 != "") {
             $.ajax({
                 url: '/Trabajos/GetVehiculosId',

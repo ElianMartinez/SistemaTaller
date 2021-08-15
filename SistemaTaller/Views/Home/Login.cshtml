@@ -15,28 +15,10 @@
 
 </head>
 <body>
-    <script>
-        var valor = window.localStorage.getItem("session");
-        
-        if (valor == "true") {
-            var user = localStorage.getItem("name");
-            var pass = localStorage.getItem("pass");
-
-            $.ajax({
-                url: '/Usuarios/GetCreUsuarios',
-                async: true,
-                type: 'POST',
-                data: {Nombre : user, Clave: pass},
-                success: function (data) {
-            location.replace("/Home/Index");
-                },
-              
-            })
-        }
-    </script>
     <h1>Login</h1>
+    <img id="imagen" src="~/loading.gif" alt="Alternate Text" />
+    <form id="formulario" class='login-form'>
 
-    <form class='login-form'>
         <div class="flex-row">
             <label class="lf--label" for="username">
                 <svg x="0px" y="0px" width="12px" height="13px">
@@ -58,6 +40,36 @@
         <input id="btnEnter" class='lf--submit' type='submit' value='LOGIN'>
     </form>
     <a class='lf--forgot' href='#'>Forgot password?</a>
+
+    <script>
+        var valor = window.localStorage.getItem("session");
+        $("#imagen").css("display", "none");
+
+        if (valor == "true") {
+            var user = localStorage.getItem("name");
+            var pass = localStorage.getItem("pass");
+
+            $.ajax({
+                url: '/Usuarios/GetCreUsuarios',
+                async: true,
+                type: 'POST',
+                data: { Nombre: user, Clave: pass },
+                beforeSend: function () {
+                    console.log("before");
+                    $("#formulario").css("display", "none");
+                    $("#imagen").css("display", "block");
+                },
+                complete: function () {
+                    console.log("complete");
+                },
+                success: function (data) {
+                    location.replace("/Home/Index");
+                },
+
+            })
+        }
+    </script>
+
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

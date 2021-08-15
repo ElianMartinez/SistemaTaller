@@ -28,9 +28,16 @@ function Validar(usuario, clave) {
         data: record,
         beforeSend: function (xhr, opts) {
             $("#btnEnter").attr('value', 'Loading.....');
+            $("#formulario").css("display", "none");
+
+            $("#imagen").css("display", "block");
+
         },
         complete: function () {
             $("#btnEnter").attr('value', 'Login');
+            $("#imagen").css("display", "none");
+            $("#formulario").css("display", "block");
+
 
         },
         success: function (data) {

@@ -16,7 +16,6 @@ namespace SistemaTaller.Models
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
         public decimal? Precio { get; set; }
-
         public virtual ICollection<DetalleTrabajo> DetalleTrabajos { get; set; }
     }
 }

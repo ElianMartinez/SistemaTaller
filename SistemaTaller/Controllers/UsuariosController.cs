@@ -29,7 +29,6 @@ namespace SistemaTaller.Controllers
                 else
                 {
                     return Json(new { status = false, message = "Credenciales Incorrecta" });
-
                 }
             }
             else

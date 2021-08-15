@@ -9,6 +9,10 @@ namespace SistemaTaller.Models
 {
     public partial class Trabajo
     {
+        public Trabajo()
+        {
+            Detalles = new HashSet<DetalleTrabajo>();
+        }
         [Key]
         public int IdTrabajo { get; set; }
         [DisplayName("Dueño")]
@@ -19,6 +23,7 @@ namespace SistemaTaller.Models
         [DisplayName("Fecha de Entrada")]
         public DateTime? FechaInicio { get; set; }
         [DisplayName("Fecha de Salida")]
+        [Required(ErrorMessage = "Por favor ingrese la fecha de salida")]
         public DateTime? Fecha_Salida { get; set; }
         [DisplayName("Vehículo")]
         [Required(ErrorMessage = "Por favor seleccione un Vehículo")]
@@ -34,5 +39,7 @@ namespace SistemaTaller.Models
         public virtual Usuario IdUsuarioNavigation { get; set; }
         [DisplayName("Vehículo")]
         public virtual Vehiculo IdVehiculoNavigation { get; set; }
+        public virtual ICollection<DetalleTrabajo> Detalles { get; set; }
+
     }
 }
