@@ -18,6 +18,7 @@ namespace SistemaTaller.Models
         }
 
         public virtual DbSet<Cliente> Clientes { get; set; }
+        public virtual DbSet<DetalleTrabajo> DetalleTrabajos { get; set; }
         public virtual DbSet<Servicio> Servicios { get; set; }
         public virtual DbSet<Trabajo> Trabajos { get; set; }
         public virtual DbSet<Usuario> Usuarios { get; set; }
@@ -55,8 +56,30 @@ namespace SistemaTaller.Models
                     .IsUnicode(false);
             });
 
-          
+            modelBuilder.Entity<DetalleTrabajo>(entity =>
+            {
+                entity.HasKey(e => e.IdDetalleTrabajo);
 
+                entity.ToTable("Detalle_Trabajo");
+
+                entity.Property(e => e.IdDetalleTrabajo).HasColumnName("Id_Detalle_Trabajo");
+
+                entity.Property(e => e.IdServicio).HasColumnName("Id_Servicio");
+                entity.Property(e => e.Id_Trabajo).HasColumnName("Id_Trabajo");
+                entity.Property(e => e.Precio).HasColumnType("decimal(18, 0)");
+
+                entity.HasOne(d => d.IdServicioNavigation)
+                    .WithMany(p => p.DetalleTrabajos)
+                    .HasForeignKey(d => d.IdServicio)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Detalle_Trabajo_Servicios");
+          
+            entity.HasOne(d => d.IdTrabajoNavigation)
+                  .WithMany(p => p.Detalles)
+                  .HasForeignKey(d => d.Id_Trabajo)
+                  .OnDelete(DeleteBehavior.Cascade)
+                  .HasConstraintName("FK_Detalle_Trabajo_Trabajo");
+        });
 
             
 

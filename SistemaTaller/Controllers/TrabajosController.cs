@@ -18,9 +18,47 @@ namespace SistemaTaller.Controllers
             _context = context;
         }
         // GET: Trabajos
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? tipo, int id )
         {
-            
+            if (tipo == 1)
+            {
+                string val = "";
+                switch (id)
+                {
+                    case 1:
+                        val = "Recibido";
+                        break;
+                    case 2:
+                        val = "Rechazado";
+                        break;
+                    case 3:
+                        val = "Terminado";
+                        break;
+                    case 4:
+                        val = "Iniciado";
+                        break;
+                    case 5:
+                        val = "En proceso";
+                        break;
+                    case 6:
+                        val = "Verificacion";
+                        break;
+
+                }
+                var tallerData = _context.Trabajos.Where(s => s.Status == val).Include(t => t.IdClienteNavigation).Include(t => t.IdVehiculoNavigation).Include(t => t.IdUsuarioNavigation);
+                return View(await tallerData.ToListAsync());
+            }
+            else if (tipo == 2)
+            {
+                var tallerData = _context.Trabajos.Where(s => s.IdUsuario == id).Include(t => t.IdClienteNavigation).Include(t => t.IdVehiculoNavigation).Include(t => t.IdUsuarioNavigation);
+                return View(await tallerData.ToListAsync());
+            }
+            else if(tipo == 3)
+            {
+                var tallerData = _context.Trabajos.Where(s => s.IdCliente == id).Include(t => t.IdClienteNavigation).Include(t => t.IdVehiculoNavigation).Include(t => t.IdUsuarioNavigation);
+                return View(await tallerData.ToListAsync());
+            }
+
             if (Global.CARGO == "Mecánico")
             {
           var tallerContext = _context.Trabajos.Where(s => s.IdUsuario == Global.ID_USER).Include(t => t.IdClienteNavigation).Include(t => t.IdVehiculoNavigation).Include(t => t.IdUsuarioNavigation);
@@ -101,11 +139,12 @@ namespace SistemaTaller.Controllers
         // GET: Trabajos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var lista1 = _context.Servicios.ToList();
+            ViewBag.Servicios = lista1;
             if (id == null)
             {
                 return NotFound();
             }
-
             var trabajo = await _context.Trabajos.FindAsync(id);
             if (trabajo == null)
             {
@@ -156,13 +195,13 @@ namespace SistemaTaller.Controllers
         }
 
         // GET: Trabajos/Delete/5
+ 
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
             var trabajo = await _context.Trabajos
                 .Include(t => t.IdClienteNavigation)
                 .Include(t => t.IdUsuarioNavigation)
@@ -181,7 +220,7 @@ namespace SistemaTaller.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var trabajo = await _context.Trabajos.FindAsync(id);
+           var trabajo = await _context.Trabajos.FindAsync(id);
             _context.Trabajos.Remove(trabajo);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

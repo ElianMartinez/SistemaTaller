@@ -4,6 +4,14 @@
     ViewData["Title"] = "Edit";
 }
 
+<style>
+    .myTable {
+        max-height: 400px;
+        overflow: auto;
+        display: inline-block;
+    }
+</style>
+
 <h1>Edit</h1>
 
 <h4>Trabajo</h4>
@@ -15,7 +23,7 @@
             <input type="hidden" asp-for="IdTrabajo" />
             <div class="form-group">
                 <label asp-for="IdCliente" class="control-label"></label>
-                <select  id="clientes" asp-for="IdCliente" class="form-control" asp-items="ViewBag.IdCliente"></select>
+                <select id="clientes" asp-for="IdCliente" class="form-control" asp-items="ViewBag.IdCliente"></select>
                 <span asp-validation-for="IdCliente" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -30,8 +38,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="FechaInicio" class="control-label"></label>
-                <input  id="fechai" asp-for="FechaInicio" class="form-control" />
-                <span   asp-validation-for="FechaInicio" class="text-danger"></span>
+                <input id="fechai" asp-for="FechaInicio" class="form-control" />
+                <span asp-validation-for="FechaInicio" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Fecha_Salida" class="control-label"></label>
@@ -41,8 +49,7 @@
 
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <select id="selectStatus" asp-for="Status" class="form-control" >
-
+                <select id="selectStatus" asp-for="Status" class="form-control">
                 </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
@@ -52,22 +59,64 @@
                 <span asp-validation-for="Observaciones" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input  type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
+                    <a class="btn btn-danger" asp-action="Index">Volver a la Tabla</a>
+               
             </div>
-        </form>S
+        </form>
+    </div>
+
+    <div class="col-md-8">
+
+        <form id="form2" class="row">
+            <div class="form-group col-6">
+                <label for="IdServicio" class="control-label">Servicio</label>
+                <select id="IdServicio" class="form-control">
+                    @foreach (var item in @ViewBag.Servicios)
+                    {
+                        <option value="@item.IdServicio">@item.Nombre</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group col-6">
+                <label for="Precio" class="control-label">Precio</label>
+                <input id="Precio" required class="form-control" />
+            </div>
+            <div class="form-group col-6">
+                <label class="control-label">Cantidad</label>
+                <input id="Stock" required class="form-control" />
+            </div>
+            <div class="form-group col-6">
+            <label for="Observaciones" class="control-label">Observaciones</label>
+            <input id="Obss" class="form-control" />
+            </div>
+            <div class="form-group col">
+                <input  type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </form>
+        <table class="table table-striped table-bordered myTable">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Descripción</th>
+                    <th>Observaciones</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="body">
+            </tbody>
+        </table>
     </div>
 </div>
 
-<div>
-    <a class="btn" asp-action="Index">Volver a la Tabla</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-
 <script>
-
     function BuscarDetalles() {
         $.ajax({
             url: '/DetalleTrabajo/Index',
@@ -77,10 +126,40 @@
             success: function (res) {
                 var json = JSON.parse(res.data);
                 console.log(json);
-                //$("#selectVehiculo").empty();
-                //json.map((item) => {
-                //    $("#selectVehiculo").append('<option value="' + item.IdVehiculo + '">' + item.Marca + " " + item.Modelo + " " + item.Annio + '</option>');
-                //})
+                $("#body").empty();
+                json.map((item) => {
+                    $("#body").
+                  append('<tr><td>' + item.Id_Detalle + '</td><td>' + item.Servicio + '</td><td>' + item.Stock + '</td><td> RD$' + item.Precio + '</td> <td>' + item.descripcion + '</td><td>' + item.observaciones + '</td><td><a onclick="editarD(' + item.Id_Detalle + ', ' + item.IdServicio + ', ' + item.Precio + ', `' + item.observaciones + '`, ' + item.Stock + ');"> <button class="btn btn-warning"><i class="fas fa-edit"></i></button> </a ><a onclick="borrarD(' + item.Id_Detalle + ');" > <button class="btn btn-danger" > <i class="fas fa-trash-alt"></i></button></a ></td ></tr > ');
+                })
+            },
+            error: function (data) {
+            }
+        });
+    }
+        var editar = 0;
+    function editarD(idDetalle, idServ, Precio, obss, stock) {
+        editar = idDetalle;
+        console.log(stock + " " + obss);
+        $("#IdServicio").val(idServ);
+        $("#Precio").val(Precio);
+        $("#Stock").val(stock);
+        $("#Obss").val(obss);
+    }
+
+    function borrarD(id) {
+        $.ajax({
+            url: '/DetalleTrabajo/Delete',
+            async: true,
+            type: 'POST',
+            data: {id:id},
+            success: function (res) {
+                if (res.status == false) {
+                    alert("Ocurrio un error");
+                } else {
+                    $("#form2")[0].reset();
+                    BuscarDetalles();
+                    editar = 0;
+                }
             },
             error: function (data) {
             }
@@ -88,6 +167,62 @@
     }
 
     $(document).ready(function () {
+
+        $("#form2").submit((e) =>
+        {
+            e.preventDefault();
+            var obj = {
+                IdServicio: $("#IdServicio").val(),
+                precio: $("#Precio").val(),
+                stock: $("#Stock").val(),
+                observaciones: $("#Obss").val(),
+                IdDetalle: editar,
+                idTrabajo: @ViewBag.id,
+            }
+            apiRest(obj);
+        });
+        function apiRest(obj) {
+            console.log(editar)
+            if (editar == 0) {
+                $.ajax({
+                    url: '/DetalleTrabajo/Create',
+                    async: true,
+                    type: 'POST',
+                    data: obj,
+                    success: function (res) {
+                        if (res.status == false) {
+                            alert("Ocurrio un error");
+                        } else {
+                            $("#form2")[0].reset();
+                            BuscarDetalles();
+                            editar = 0;
+
+                        }
+                    },
+                    error: function (data) {
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: '/DetalleTrabajo/Edit',
+                    async: true,
+                    type: 'POST',
+                    data: obj,
+                    success: function (res) {
+                        if (res.status == false) {
+                            alert("Ocurrio un error");
+                        } else {
+                            $("#form2")[0].reset();
+                            BuscarDetalles();
+                            editar = 0;
+                        }
+                    },
+                    error: function (data) {
+                    }
+                });
+            }
+        }
+
         BuscarDetalles();
         var valor2 = $('#clientes').val();
         if (valor2 != "") {
@@ -115,16 +250,16 @@
             $("#selectVehiculo").attr("readonly", "readonly");
             $("#fechai").attr("readonly", "readonly");
             $("#fechae").attr("readonly", "readonly");
-            $("#selectStatus").append('<option value="Inciado">INICIADO</option> <option value="Terminado">TERMINADO</option>  <option value="Rechazado">RECHAZADO</option>');
+            $("#selectStatus").append('<option value="Iniciado">INICIADO</option> <option value="Terminado">TERMINADO</option>  <option value="Rechazado">RECHAZADO</option>');
         } else if (valor == "Representante") {
             $("#usuarios").attr("readonly", "readonly");
             $("#selectStatus").append('<option value="Recibido">RECIBIDO</option>');
         } else {
-            $("#clientes").attr("disabled", "readonly");
-            $("#fechai").attr("disabled", "readonly");
-            $("#fechae").attr("disabled", "readonly");
-            $("#selectVehiculo").attr("disabled", "readonly");
-            $("#usuarios").attr("disabled", "readonly");
+            $("#clientes").attr("readonly", "readonly");
+            $("#fechai").attr("readonly", "readonly");
+            $("#fechae").attr("readonly", "readonly");
+            $("#selectVehiculo").attr("readonly", "readonly");
+            $("#usuarios").attr("readonly", "readonly");
             $("#selectStatus").append('<option value="En proceso">EN PROCESO</option> <option value="Verificacion">VERIFICACIÓN</option>');
         }
     });

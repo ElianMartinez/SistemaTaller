@@ -13,6 +13,35 @@
     </p>
 }
 
+@if (Global.CARGO != "Mecánico")
+{
+    <form class="row" asp-action="Index">
+        <div class="form-group col-5">
+            <label>Campo</label>
+            <select class="form-control" name="tipo" id="select">
+                <option value="1">Status</option>
+                <option value="2">Mecánico</option>
+                <option value="3">Cliente</option>
+            </select>
+        </div>
+        <div class="form-group col-5">
+            <label>Valor</label>
+            <select name="id" id="select2" class="form-control">
+            </select>
+        </div>
+        <div class="form-group col-2">
+            <label></label>
+            <button class="form-control btn btn-success" type="submit" value="Buscar"><i class="fas fa-search"></i> </button>
+        </div>
+    </form>
+
+    <p>
+        <a class="btn btn-secondary" asp-action="Index">Todos</a>
+    </p>
+}
+
+
+
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -65,7 +94,46 @@
                     @Html.DisplayFor(modelItem => item.IdVehiculoNavigation.Annio)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Status)
+                    @if (item.Status == "Recibido")
+                    {
+                        <button class="btn btn-block">
+                            <i class="fab fa-get-pocket"></i>Recibido
+                        </button>
+                    }
+                    else if (item.Status == "Rechazado")
+                    {
+                        <button class="btn btn-danger">
+                            <i class="fas fa-times-circle"></i>Rechazado
+                        </button>
+                    }
+                    else if (item.Status == "Terminado")
+                    {
+                        <button class="btn btn-success">
+                            <i class="fas fa-check-square"></i>Terminado
+
+                        </button>
+                    }
+                    else if (item.Status == "Iniciado")
+                    {
+                        <button class="btn btn-info">
+                            <i class="fas fa-play"></i> ..Inciado
+
+                        </button>
+                    }
+                    else if (item.Status == "En proceso")
+                    {
+                        <button class="btn btn-warning">
+                            <i class="fas fa-hammer"></i> En proceso
+
+                        </button>
+                    }
+                    else if (item.Status == "Verificacion")
+                    {
+                        <button class="btn btn-info">
+                            <i class="fas fa-hammer"></i>Verificación
+                        </button>
+
+                    }
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.IdTrabajo"><button class="btn btn-warning"><i class="fas fa-edit"></i></button> </a>
@@ -73,10 +141,72 @@
 
                     @if (Global.CARGO == "Representante")
                     {
-                    <a asp-action="Delete" asp-route-id="@item.IdTrabajo"> <button class="btn btn-danger"> <i class="fas fa-trash-alt"></i></button></a>
+                        <a asp-action="Delete" asp-route-id="@item.IdTrabajo"> <button class="btn btn-danger"> <i class="fas fa-trash-alt"></i></button></a>
                     }
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<script>
+    $(document).ready(function () {
+
+
+
+        var append = '<option value="1">Recibido</option>';
+        append += '<option value="2"> Rechazado</option>';
+        append += '<option value="3">Terminado</option>';
+        append += '<option value="4">Iniciado</option>';
+        append += '<option value="5">En proceso</option>';
+        append += '<option value="6">Verificación</option>';
+        $("#select2").append(append);
+
+        $("#select").on("change", async function () {
+            var valor = $(this).val();
+            if (valor == 1) {
+                //Buscar status
+                $("#select2").empty();
+                var append = '<option value="1">Recibido</option>';
+                append += '<option value="2"> Rechazado</option>';
+                append += '<option value="3">Terminado</option>';
+                append += '<option value="4">Iniciado</option>';
+                append += '<option value="5">En proceso</option>';
+                append += '<option value="6">Verificación</option>';
+                $("#select2").append(append);
+            } else if (valor == 2) {
+                getData(2);
+            } else {
+                getData(3);
+            }
+        })
+    });
+
+
+    function getData(ti) {
+        $.ajax({
+            url: '/DetalleTrabajo/GetDataSelect',
+            async: true,
+            type: 'POST',
+            data: { tipo: ti },
+            success: function (res) {
+                var json = JSON.parse(res.data);
+                if (ti == 2) {
+                    $("#select2").empty();
+                    json.map(i => {
+                        $("#select2").append("<option value='" + i.IdUsuarios + "'>" + i.Nombre + "</option>");
+                    });
+                } else {
+                    $("#select2").empty();
+                    console.log(json)
+                    json.map(i => {
+                        $("#select2").append("<option value='" + i.IdClientes + "'>" + i.Nombre + "</option>");
+                    });
+                }
+            },
+            error: function (data) {
+                alert(data);
+            }
+        });
+    }
+</script>

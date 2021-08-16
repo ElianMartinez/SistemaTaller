@@ -10,6 +10,7 @@ namespace SistemaTaller.Models
         public Servicio()
         {
             DetalleTrabajos = new HashSet<DetalleTrabajo>();
+
         }
 
         public int IdServicio { get; set; }
